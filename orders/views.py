@@ -11,7 +11,7 @@ from razorpay import client
 
 from product.models import Product
 from django.shortcuts import render, redirect
-from carts.models import CartItem, Coupon, UsedCoupon
+from carts.models import CartItem, Coupon
 from orders.forms import OrderForm
 from orders.models import Order, Payment, OrderProduct
 from django.http import JsonResponse

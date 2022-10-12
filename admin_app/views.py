@@ -1,5 +1,4 @@
 import calendar
-import tempfile
 
 from django.contrib.auth import authenticate, login, logout
 from django.core.paginator import Paginator
@@ -9,7 +8,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views.decorators.cache import cache_control
 from django.template.loader import render_to_string
-from weasyprint import HTML
+
 from accounts.models import Account
 from admin_app.pdf import html_to_pdf
 from brand.models import Brand
