@@ -246,7 +246,7 @@ def checkout(request, total=0, quantity=0, cart_items=None):
     return render(request, 'store/checkout.html', context)
 
 
-def couponapply(request):
+def coupon_apply(request):
     if request.method == 'POST':
 
         coupon_code = request.POST.get('coupon_code')

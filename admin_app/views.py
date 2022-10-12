@@ -1,5 +1,6 @@
 import calendar
-
+import csv
+from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.core.paginator import Paginator
 from django.db.models import Q, Count
@@ -8,7 +9,6 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views.decorators.cache import cache_control
 from django.template.loader import render_to_string
-
 from accounts.models import Account
 from admin_app.pdf import html_to_pdf
 from brand.models import Brand
@@ -89,7 +89,7 @@ def admin_home(request):
 
         order_count = OrderProduct.objects.count()
         product_count = Product.objects.count()
-        print(product_count)
+
         cat_count = Category.objects.count()
         user_count = Account.objects.count()
 
@@ -127,7 +127,7 @@ def admin_logout(request):
 
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
-def categoryList(request):
+def category_list(request):
     if 'username' in request.session:
         search_key = request.GET.get('key') if request.GET.get('key') is not None else ''
         values = Category.objects.all().order_by('id') and Category.objects.filter(
@@ -141,7 +141,7 @@ def categoryList(request):
 
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
-def brandList(request):
+def brand_list(request):
     if 'username' in request.session:
         search_key = request.GET.get('key') if request.GET.get('key') is not None else ''
         values = Brand.objects.all().order_by('id') | Brand.objects.filter(brand_name__istartswith=search_key)
@@ -155,7 +155,7 @@ def brandList(request):
 
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
-def productList(request):
+def product_list(request):
     if 'username' in request.session:
         search_key = request.GET.get('key') if request.GET.get('key') is not None else ''
         values = Product.objects.all().order_by('id') and Product.objects.filter(
@@ -169,7 +169,7 @@ def productList(request):
 
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
-def addcategory(request):
+def add_category(request):
     if 'username' in request.session:
 
         if request.method == "POST":
@@ -180,7 +180,7 @@ def addcategory(request):
             else:
                 messages.error(request, 'Error')
 
-            return redirect(categoryList)
+            return redirect(category_list)
         cat_form = CategoryForm()
         cats = Category.objects.all()
         context = {'cat_form': cat_form, 'cats': cats}
@@ -189,17 +189,17 @@ def addcategory(request):
     return redirect(admin_login)
 
 
-def deletecategory(request, id):
+def delete_category(request, id):
     if 'username' in request.session:
         my_cat = Category.objects.get(id=id)
         my_cat.delete()
-        return redirect(categoryList)
+        return redirect(category_list)
     else:
         return redirect(admin_login)
 
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
-def addbrand(request):
+def add_brand(request):
     if 'username' in request.session:
 
         if request.method == "POST":
@@ -210,7 +210,7 @@ def addbrand(request):
             else:
                 messages.error(request, 'Error')
 
-            return redirect(brandList)
+            return redirect(brand_list)
         brand_form = BrandForm()
         brands = Brand.objects.all()
         context = {'brand_form': brand_form, 'brands': brands}
@@ -219,17 +219,17 @@ def addbrand(request):
     return redirect(admin_login)
 
 
-def deletebrand(request, id):
+def delete_brand(request, id):
     if 'username' in request.session:
         my_brand = Brand.objects.get(id=id)
         my_brand.delete()
-        return redirect(brandList)
+        return redirect(brand_list)
     else:
         return redirect(admin_login)
 
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
-def addproduct(request):
+def add_product(request):
     if 'username' in request.session:
 
         if request.method == "POST":
@@ -240,7 +240,7 @@ def addproduct(request):
             else:
                 messages.error(request, 'Error')
 
-            return redirect(productList)
+            return redirect(product_list)
         prod_form = ProductForm()
 
         context = {'prod_form': prod_form}
@@ -248,7 +248,7 @@ def addproduct(request):
 
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
-def editproduct(request, id):
+def edit_product(request, id):
     if 'username' in request.session:
         product = Product.objects.get(id=id)
         form = ProductForm(instance=product)
@@ -257,7 +257,7 @@ def editproduct(request, id):
 
             if form.is_valid():
                 form.save()
-                return redirect(productList)
+                return redirect(product_list)
         else:
 
             return render(request, 'admin/productedit.html', {'form': form})
@@ -266,7 +266,7 @@ def editproduct(request, id):
 
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
-def editcategory(request, id):
+def edit_category(request, id):
     if 'username' in request.session:
         category = Category.objects.get(id=id)
         form = CategoryForm(instance=category)
@@ -275,7 +275,7 @@ def editcategory(request, id):
 
             if form.is_valid():
                 form.save()
-                return redirect(categoryList)
+                return redirect(category_list)
         else:
 
             return render(request, 'admin/categoryedit.html', {'form': form})
@@ -284,7 +284,7 @@ def editcategory(request, id):
 
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
-def editbrand(request, id):
+def edit_brand(request, id):
     if 'username' in request.session:
         brand = Brand.objects.get(id=id)
         form = BrandForm(instance=brand)
@@ -293,7 +293,7 @@ def editbrand(request, id):
 
             if form.is_valid():
                 form.save()
-                return redirect(brandList)
+                return redirect(brand_list)
         else:
 
             return render(request, 'admin/brandedit.html', {'form': form})
@@ -301,16 +301,16 @@ def editbrand(request, id):
         return redirect(admin_login)
 
 
-def deleteproduct(request, id):
+def delete_product(request, id):
     if 'username' in request.session:
         my_product = Product.objects.get(id=id)
         my_product.delete()
-        return redirect(productList)
+        return redirect(product_list)
     else:
         return redirect(admin_login)
 
 
-def activeusers(request):
+def active_users(request):
     if "key" in request.GET:
         search_key = request.GET.get('key') if request.GET.get('key') is not None else ''
         users = Account.objects.order_by("id").filter(is_admin=False).all() and Account.objects.filter(
@@ -323,7 +323,7 @@ def activeusers(request):
     return render(request, "admin/activeusers.html", context)
 
 
-def blockuser(request, user_id):
+def block_user(request, user_id):
     if 'username' in request.session:
         user = Account.objects.get(pk=user_id)
         user.is_active = False
@@ -331,7 +331,7 @@ def blockuser(request, user_id):
         return redirect("activeusers")
 
 
-def unblockuser(request, user_id):
+def unblock_user(request, user_id):
     if 'username' in request.session:
         user = Account.objects.get(pk=user_id)
         user.is_active = True
@@ -339,14 +339,14 @@ def unblockuser(request, user_id):
         return redirect("activeusers")
 
 
-def deleteuser(request, user_id):
+def delete_user(request, user_id):
     if 'username' in request.session:
         dlt = Account.objects.get(pk=user_id)
         dlt.delete()
         return redirect("activeusers")
 
 
-def orderdisplay(request):
+def order_display(request):
     if 'username' in request.session:
         if "key" in request.GET:
             search_key = request.GET.get('key') if request.GET.get('key') is not None else ''
@@ -374,20 +374,20 @@ def orderdisplay(request):
 
 
     else:
-        return redirect("adminlogin")
+        return redirect(admin_login)
 
 
-def orderdetailsadmin(request, id):
+def order_details_admin(request, id):
     if 'username' in request.session:
 
         orderproducts = OrderProduct.objects.filter(order=id).order_by('-id')
         return render(request, 'admin/orderdetailsadmin.html', {'orderproducts': orderproducts})
 
     else:
-        return redirect("adminlogin")
+        return redirect(admin_login)
 
 
-def orderstatus(request, id):
+def order_status(request, id):
     if 'username' in request.session:
         if request.method == "POST":
             status = request.POST.get('status')
@@ -396,13 +396,13 @@ def orderstatus(request, id):
             order.status = status
             order.save()
 
-        return redirect(orderdisplay)
+        return redirect(order_display)
 
     else:
-        return redirect('adminlogin')
+        return redirect(admin_login)
 
 
-def viewcoupon(request):
+def view_coupon(request):
     if 'username' in request.session:
         values = Coupon.objects.all()
         return render(request, 'admin/couponlist.html', {'values': values})
@@ -410,16 +410,16 @@ def viewcoupon(request):
         return redirect(admin_login)
 
 
-def deletecoupon(request, id):
+def delete_coupon(request, id):
     if 'username' in request.session:
         my_coupon = Coupon.objects.get(id=id)
         my_coupon.delete()
-        return redirect(viewcoupon)
+        return redirect(view_coupon)
     else:
         return redirect(admin_login)
 
 
-def addcoupon(request):
+def add_coupon(request):
     if 'username' in request.session:
 
         if request.method == "POST":
@@ -430,7 +430,7 @@ def addcoupon(request):
             else:
                 messages.error(request, 'Error')
 
-            return redirect(viewcoupon)
+            return redirect(view_coupon)
         coupon_form = CouponForm()
 
         context = {'coupon_form': coupon_form}
@@ -447,7 +447,7 @@ def variation(request):
         return redirect(admin_login)
 
 
-def deletevariation(request, id):
+def delete_variation(request, id):
     if 'username' in request.session:
         my_var = Variation.objects.get(id=id)
         my_var.delete()
@@ -456,7 +456,7 @@ def deletevariation(request, id):
         return redirect(admin_login)
 
 
-def addvariation(request):
+def add_variation(request):
     if 'username' in request.session:
 
         if request.method == "POST":
@@ -476,21 +476,21 @@ def addvariation(request):
     return redirect(admin_login)
 
 
-def brand_Offer(request):
+def brand_offer(request):
     offers = BrandOffer.objects.order_by("id").all()
     return render(
         request, "admin/existing_brand_Offer.html", {"offers": offers}
     )
 
 
-def category_Offer(request):
+def category_offer(request):
     offers = CategoryOffer.objects.order_by("id").all()
     return render(
         request, "admin/existing_category_Offer.html", {"offers": offers}
     )
 
 
-def product_Offer(request):
+def product_offer(request):
     offers = ProductOffer.objects.order_by("id").all()
     return render(
         request, "admin/existing_product_Offer.html", {"offers": offers}
@@ -530,67 +530,67 @@ def add_product_offer(request):
     return render(request, "admin/add_product_offer.html", context)
 
 
-def blockBrandOffer(request, brand_id):
+def block_brand_offer(request, brand_id):
     brandoff = BrandOffer.objects.get(pk=brand_id)
     brandoff.is_valid = False
     brandoff.save()
     return redirect("brand_offer")
 
 
-def unblockBrandOffer(request, brand_id):
+def unblock_brand_offer(request, brand_id):
     brandoff = BrandOffer.objects.get(pk=brand_id)
     brandoff.is_valid = True
     brandoff.save()
     return redirect("brand_offer")
 
 
-def blockCategoryOffer(request, category_id):
+def block_category_offer(request, category_id):
     categoryoff = CategoryOffer.objects.get(pk=category_id)
     categoryoff.is_valid = False
     categoryoff.save()
     return redirect("category_offer")
 
 
-def unblockCategoryOffer(request, category_id):
+def unblock_category_offer(request, category_id):
     categoryoff = CategoryOffer.objects.get(pk=category_id)
     categoryoff.is_valid = True
     categoryoff.save()
     return redirect("category_offer")
 
 
-def blockProductOffer(request, product_id):
+def block_product_offer(request, product_id):
     productoff = ProductOffer.objects.get(pk=product_id)
     productoff.is_valid = False
     productoff.save()
     return redirect("product_offer")
 
 
-def unblockProductOffer(request, product_id):
+def unblock_product_offer(request, product_id):
     productoff = ProductOffer.objects.get(pk=product_id)
     productoff.is_valid = True
     productoff.save()
     return redirect("product_offer")
 
 
-def deleteBrandOffer(request, brand_id):
+def delete_brand_offer(request, brand_id):
     dlt = BrandOffer.objects.get(pk=brand_id)
     dlt.delete()
     return redirect("brand_offer")
 
 
-def deleteCategoryOffer(request, category_id):
+def delete_category_offer(request, category_id):
     dlt = CategoryOffer.objects.get(pk=category_id)
     dlt.delete()
     return redirect("category_offer")
 
 
-def deleteProductOffer(request, product_id):
+def delete_product_offer(request, product_id):
     dlt = ProductOffer.objects.get(pk=product_id)
     dlt.delete()
     return redirect("product_offer")
 
 
-def editBrandOffer(request, brand_id):
+def edit_brand_offer(request, brand_id):
     editBrandOff = BrandOffer.objects.get(pk=brand_id)
     form = BrandOfferForm(instance=editBrandOff)
     if request.method == "POST":
@@ -608,7 +608,7 @@ def editBrandOffer(request, brand_id):
     return render(request, "admin/editBrandOffer.html", context)
 
 
-def editCategoryOffer(request, category_id):
+def edit_category_offer(request, category_id):
     editCategoryOff = CategoryOffer.objects.get(pk=category_id)
     form = CategoryOfferForm(instance=editCategoryOff)
     if request.method == "POST":
@@ -628,7 +628,7 @@ def editCategoryOffer(request, category_id):
     return render(request, "admin/editCategoryOffer.html", context)
 
 
-def editProductOffer(request, product_id):
+def edit_product_offer(request, product_id):
     editProductOff = ProductOffer.objects.get(pk=product_id)
     form = ProductOfferForm(instance=editProductOff)
     if request.method == "POST":
@@ -652,9 +652,7 @@ def sales_report(request):
     return render(request, "admin/salesreport.html", context)
 
 
-import csv
 
-from django.http import HttpResponse, HttpResponseNotFound
 
 
 def sales_export_csv(request):

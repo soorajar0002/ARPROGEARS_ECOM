@@ -174,7 +174,7 @@ def payment_method(request):
 
 
 @csrf_exempt
-def paymenthandler(request, total=0, quantity=0):
+def payment_handler(request, total=0, quantity=0):
     if request.method == "POST":
         try:
 
@@ -405,7 +405,7 @@ def return_order(request, order_id):
     return redirect('my_orders')
 
 
-def orderstatus(request, id):
+def order_status(request, id):
     if request.method == "POST":
         status = request.POST.get('status')
 

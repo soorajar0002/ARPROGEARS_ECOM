@@ -161,7 +161,7 @@ def confirm_signup(request):
     return render(request, "user/confirm_signup.html")
 
 
-def signinotp(request):
+def signin_otp(request):
     if request.method == "POST":
         mobile = request.POST["phone"]
         try:
