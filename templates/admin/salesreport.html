@@ -1,0 +1,85 @@
+{% extends "admin/admin_base.html" %}
+
+{% block content %}
+
+<!-- Content Header (Page header) -->
+<div class="content-header sty-one">
+    <h1 class="text-dark">Sales Report</h1>
+
+
+</div>
+<br>
+
+
+
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+        <tr class="text-center">
+            <th scope="col">Id</th>
+            <th scope="col">Product</th>
+            <th scope="col">Brand</th>
+            <th scope="col">Category</th>
+            <th scope="col">Stock</th>
+            <th scope="col">Price</th>
+            <th scope="col">Sales Count</th>
+            <th scope="col">Revenue</th>
+            <th scope="col">Profit</th>
+
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for x in product %}
+        <tr class="text-center">
+
+            <th scope="row">{{forloop.counter}}</th>
+            <td>{{x.product_name}}</td>
+            <td>{{x.brand}}</td>
+            <td>{{x.category}}</td>
+            <td>{{x.stock}}</td>
+            <td>{{x.price}}</td>
+
+            <td>
+                                    {% if x.get_count %}
+                                    {{x.get_count.0.quantity}}
+
+                                    {% endif %}
+                                </td>
+
+             <td>
+                                {% if x.get_revenue %}
+                                 {{x.get_revenue.0.revenue}}
+
+                                {% endif %}
+                                </td>
+            <td>
+                                    {% if x.get_profit %}
+                                    {{x.get_profit}}
+
+                                    {% endif %}
+
+                                </td>
+
+
+
+        </tr>
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+<div class="btn btn-dark mb-2 mx-2"> <a href="{% url 'sales_export_pdf'%}" class="text-white">PDF</a></div>
+<div class="btn btn-dark mb-2 "> <a href="{% url 'sales_export_csv' %}" class="text-white">EXCEL</a></div>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- /.content -->
+{% endblock content %}

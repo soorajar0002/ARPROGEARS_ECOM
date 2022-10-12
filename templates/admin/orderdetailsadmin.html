@@ -1,0 +1,61 @@
+{% extends "admin/admin_base.html" %}
+
+{% block content %}
+
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <!-- <h3 class="page-title"> Basic Tables </h3> -->
+              <!-- <nav aria-label="breadcrumb">
+                <ol class="breadcrumb"> -->
+                  <!-- <li class="breadcrumb-item"><a href="#">Tables</a></li> -->
+                  <!-- <li class="breadcrumb-item active" aria-current="page">Basic tables</li> -->
+                <!-- </ol> -->
+              </nav>
+            </div>
+
+
+
+              <div class=" table-responsive">
+
+
+                    <table class="table table-hover">
+                      <thead>
+                        <tr>
+                            <th>Item</th>
+                          <th> Order </th>
+                          <th> Product   </th>
+                          <th> Quantity </th>
+                          <th> Price  </th>
+                          <th> Ordered Date </th>
+                          <th> Payment Status </th>
+
+                        </tr>
+                      </thead>
+                      <tbody>
+
+                        {% for orderproduct in orderproducts %}
+                        <tr>
+                            <td><img src="{{orderproduct.product.images.url}}" width="50rem"/></td>
+                            <td>#{{orderproduct.order.order_number}}</td>
+                          <td>{{orderproduct.product}}</td>
+                          <td>{{orderproduct.quantity}}</td>
+                          <td>{{orderproduct.product_price}}</td>
+                          <td>
+                            {{orderproduct.created_at}}
+                          </td>
+                          <td>
+                            {{orderproduct.payment.status}}
+                          </td>
+
+                        {% endfor %}
+                      </tbody>
+                    </table>
+
+
+              </div>
+             </div>
+          </div>
+
+{% endblock content %}

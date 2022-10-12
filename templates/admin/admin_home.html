@@ -1,0 +1,108 @@
+{% extends "admin/admin_base.html" %}
+
+{% block content %}
+
+{% load static%}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
+
+<!-- partial -->
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="row" id="proBanner">
+            <div class="col-12">
+
+            </div>
+        </div>
+        <div class="page-header">
+            <h3 class="page-title">
+        <span class="page-title-icon bg-gradient-primary text-white mr-2">
+          <i class="mdi mdi-home"></i>
+        </span> Dashboard
+            </h3>
+
+        </div>
+        <div class="row">
+            <div class="col-md-4 stretch-card grid-margin my-5 text-center">
+                <div class="card bg-dark card-img-holder text-white">
+                    <div class="card-body">
+
+                        <h4 class="font-weight-normal mb-3 h1 text-white">Total Income
+                        </h4>
+
+                        <h2 class="mb-5 text-white">₹{{income}}</h2>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 stretch-card grid-margin my-5 text-center ">
+                <div class="card bg-dark card-img-holder text-white">
+                    <div class="card-body">
+
+                        <h4 class="font-weight-normal mb-3 h1 text-white">Total Product
+                        </h4>
+                        <h2 class="mb-5 text-white">{{product_count}}</h2>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 stretch-card grid-margin my-5 text-center">
+                <div class="card bg-dark  card-img-holder text-white">
+                    <div class="card-body">
+
+                        <h4 class="font-weight-normal mb-3 h1 text-white"> Total Orders
+                        </h4>
+                        <h2 class="mb-5 text-white">{{order_count}}</h2>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>     <!-- container-scroller -->
+<!-- plugins:js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<canvas id="chart"></canvas>
+
+
+<script>let ctx = document.getElementById("chart").getContext("2d");
+let chart = new Chart(ctx, {
+  type: "pie",
+  data: {
+   labels: ["New", "Accepted", "Completed", "Cancelled","Returned"],
+   datasets: [
+    {
+      label: "Status of Order",
+      borderColor: "#000000",
+      backgroundColor: [
+						'rgb(255, 99, 132)',
+						'rgb(255, 159, 64)',
+						'rgb(255, 205, 86)',
+						'rgb(75, 192, 192)',
+						'rgb(54, 162, 235)',
+						'rgb(153, 102, 255)',
+						'rgb(201, 203, 207)'
+					],
+					hoverOffset: 4,
+
+
+      data: {{data1}}
+    }
+   ]
+  },
+  options: {
+   title: {
+    text: "Status of Orders",
+    display: true
+   }
+  }
+});
+
+</script>
+
+
+
+
+{% endblock content %}

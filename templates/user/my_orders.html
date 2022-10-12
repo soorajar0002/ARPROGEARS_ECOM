@@ -1,0 +1,94 @@
+{% extends "user/base.html" %}
+
+{% block content %}
+
+<section class="section-content my-5 pb-5">
+
+    <div class="container ">
+        <div class="row">
+            <aside class="col-md-3">
+                <!--   SIDEBAR   -->
+                <ul class="list-group">
+                    <a class="list-group-item {% if '/dashboard' == request.path %}active{% endif %}"
+                       href="{% url 'dashboard' %}"> Dashboard </a>
+                    <a class="list-group-item {% if '/my_orders' in request.path %}active{% endif %}"
+                       href="{% url 'my_orders' %}"> My Orders </a>
+                    <a class="list-group-item {% if '/edit_profile/' in request.path %}active{% endif %}"
+                       href="{% url 'edit_profile' %}"> Edit Profile </a>
+                    <a class="list-group-item {% if '/change_password/' in request.path %}active{% endif %}"
+                       href="{% url 'change_password' %}">Change Password </a>
+
+                </ul>
+                <br>
+                <a class="btn btn-light btn-block" href="{% url 'user_logout' %}"> <i class="fa fa-power-off"></i> <span
+                        class="text">Log out</span> </a>
+                <!--   SIDEBAR .//END   -->
+            </aside>
+
+            <main class="col-md-9">
+                <div class="" style="margin-left:50rem"><b><a href="{% url 'canceled_order' %}" style="text-decoration:none; color:#000;">Cancelled Orders</a></b></div>
+                <article class="card">
+                    <header class="card-header">
+                       <div><strong class="d-inline-block mr-3">Your Order History</strong></div>
+
+
+                    </header>
+                    <div class="card-body">
+                        <div class="row ">
+
+                            <div class="col-md-12 col-sm-12">
+                                <table class="table table-responsive">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Order #</th>
+                                        <th scope="col">Billing Name</th>
+                                        <th scope="col">Phone</th>
+
+                                        <th scope="col"> Ordered Date</th>
+                                          <th scope="col">Status</th>
+                                        <th scope="col"> </th>
+                                        <th scope="col"> </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for order in orders %}
+                                    <tr>
+                                        <th scope="row"><a class="text-dark" style="text-decoration:none;" href="">{{order.order_number}}</a>
+                                        </th>
+                                        <td>{{order.full_name}}</td>
+                                        <td>{{order.phone}}</td>
+
+                                        <td>{{order.created_at}}</td>
+                                        <td>{{order.status}}</td>
+                                        <td><a class="btn btn-dark"  href="{% url 'order_detail' order.order_number %}">View Details</a></td>
+
+                                        {% if order.status == "Completed" %}
+                                        <td><a class="btn btn-dark"  href="{% url 'return_order' order.order_number %}">Return</a></td>
+                                        {% elif order.status == "Returned" %}
+                                         <td><a class=""  href=""> </a></td>
+                                        {% else %}
+                                        <td><a class="btn btn-dark"  href="{% url 'cancel_order' order.order_number %}">Cancel</a></td>
+
+                                        {% endif%}
+
+                                    </tr>
+                                    {% endfor %}
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+
+                        </div> <!-- row.// -->
+                    </div> <!-- card-body .// -->
+
+                </article> <!-- order-group.// -->
+            </main>
+        </div> <!-- row.// -->
+    </div>
+
+
+</section>
+
+
+{% endblock content %}

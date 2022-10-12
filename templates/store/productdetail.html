@@ -1,0 +1,106 @@
+{% extends 'user/base.html'%}
+{% block content %}
+{%load static%}
+
+<section class="section-content padding-y mt-5 mb-5bg">
+    <div class="container">
+
+        <!-- ============================ COMPONENT 1 ================================= -->
+        <div class="card">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="gallery-wrap">
+                        <div class="img-big-wrap mainImage mx-5 my-5">
+                            <img src="{{single_product.images.url}}" class="img-fluid" width="500rem">
+                            
+                        </div>
+
+                    </div>
+                    <ul class="thumb">
+                        <li>
+                            {% for i in product_gallery %}
+                            <a href="{{ i.image.url}}" target="mainImage"><img src="{{ i.image.url}}" alt="Product Image"></a>
+                            {% endfor %}
+                        </li>
+                    </ul>
+
+
+                </div>
+                <div class="col-md-6">
+                   <form action="{% url 'add_cart' single_product.id %}" method="POST" >
+                        {% csrf_token %}
+                        <article class="content-body my-5 mx-5">
+
+                            <h2 class="title">{{single_product.product_name}}</h2>
+                            {% if single_product.offer_price == 0 %}
+                            <div class="mb-3">
+                                <var class="price h4">₹{{single_product.price}}</var>
+                            </div>
+                            {% else %}
+                            <div class="mb-3">
+                                <var class="price h4"><s>₹{{single_product.price}}</s></var>
+                            </div>
+                            <div class="mb-3">
+                                <var class="price h4">₹{{single_product.offer_price}}<span class="text-danger"> ({{single_product.percentage}}%)</span></var>
+                            </div>
+                            {% endif %}
+
+                            <p>{{single_product.description}}</p>
+
+
+                            <hr>
+                            <div class="row">
+                                <div class="item-option-select col-md-3">
+                                    <h6>Choose Color</h6>
+
+                                    <select name="color" class="form-control " required>
+                                        <option value="" disabled selected>select</option>
+                                        {% for i in single_product.variation_set.colors %}
+                                        <option value="{{ i.variation_value  | lower}}">{{ i.variation_value|lower|capfirst }}</option>
+                                        {% endfor %}
+
+
+                                    </select>
+
+                                </div>
+                            </div> <!-- row.// -->
+                            <div class="row my-4">
+                                <div class="item-option-select col-md-3">
+                                        <h6>Choose Size</h6>
+                                    <select name="size" class="form-control" required>
+                                        <option value="" disabled selected>select</option>
+                                        {% for i in single_product.variation_set.sizes %}
+                                        <option value="{{ i.variation_value  | lower }}">{{ i.variation_value | lower | capfirst }}</option>
+                                        {% endfor %}
+                                    </select>
+
+                                </div>
+                            </div> <!-- row.// -->
+                            <hr>
+                            {% if single_product.stock <= 0 %}
+                            <h5 class="text-danger">Out of Stock</h5>
+                            {% else %}
+
+                            <button type="submit" class="btn  btn-dark"><span class="text">Add to Cart</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                     class="bi bi-cart mb-1 ms-1" viewBox="0 0 16 16">
+                                    <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                                </svg>
+                            </button>
+                            {% endif %}
+                        </article> <!-- product-info-aside .// -->
+                    </form>
+
+                </div>
+            </div>
+        </div> <!-- card.// -->
+        <!-- ============================ COMPONENT 1 END .// ================================= -->
+
+        <br>
+
+
+
+
+    </div> <!-- container .//  -->
+</section>
+{% endblock %}

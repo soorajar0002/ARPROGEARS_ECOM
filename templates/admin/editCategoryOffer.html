@@ -1,0 +1,24 @@
+{% extends "admin/admin_base.html" %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+<div class="container mt-5">
+   <div class="row d-flex justify-content-center align-items-center">
+        <div class="col-12 col-md-10 ">
+            <div class="card shadow p-3 mb-5 bg-white rounded" style="border-radius: 8px;">
+                <div class="card-body p-5">
+                    <h4>Edit Category Offer</h4>
+                    <form action="" method="post" enctype="multipart/form-data" class="col-xl-6">
+                        {% csrf_token %}
+                        {{ form | crispy }}
+                        <div class="form-group">
+                            <div id="image-box" class="image-container"></div>
+                            <button class="btn btn-outline-info" id="confirm-btn" style="width: 100%; margin-top: 10px;" type="submit">Add</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content%}

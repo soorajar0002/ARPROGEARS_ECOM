@@ -1,0 +1,124 @@
+{% extends "admin/admin_base.html" %}
+
+{% block content %}
+<!-- Content Header (Page header) -->
+<div class="content-header sty-one">
+    <h1 class="text-dark">CATEGORY MANAGEMENT</h1>
+    <a href="{% url 'addcategory'%}">
+        <button type="submit" class="btn btn-dark">Add category</button>
+    </a>
+
+</div>
+
+<br class="m-t-1 m-b-3">
+<div class="pull-right search-box">
+    <form action="" method="get" class="search-form">
+        <div class="input-group">
+            <input name="key" class="form-control" placeholder="Search..." type="text">
+            <span class="input-group-btn">
+          <button type="submit"  id="search-btn" class="btn btn-flat"><i
+                  class="fa fa-search"></i> </button>
+          </span></div>
+    </form>
+    <!-- search form --> </div>
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col" class=""> Name</th>
+            <th scope="col">Slug</th>
+            <th scope="col">Description</th>
+            <th scope="col">Image</th>
+
+            <th scope="col"></th>
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
+
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for x in catvalues %}
+        <tr>
+            <th scope="row">{{x.id}}</th>
+            <td>{{x.category_name}}</td>
+            <td>{{x.slug}}</td>
+            <td>{{x.description}}</td>
+            <td><img src="{{x.cat_image.url}}" width="50rem"  ></td>
+            <td>
+                <td><a href="{% url 'edit-category' x.id %}">
+                <button type="submit" class="btn btn-dark">Edit</button>
+            </a></td>
+
+
+            <!-- <td><a href="deletecategory/{{ x.id }}"><button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure to delete?')" >delete</button></a></td> -->
+            <td>
+                <form action="{% url 'delete-category' x.id %}" method="POST" >
+                    {% csrf_token %}
+
+                    <a data-bs-toggle="modal" data-bs-target="#delete-{{x.id}}">
+                        <button type="" class="btn btn-dark btn-block mb-4">Delete</button>
+
+                    </a>
+                    <div class="modal fade" id="delete-{{x.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+
+                                    <p style="color:#000000 ;">Do you really want to delete {{x.category_name}}</p>
+                                </div>
+                                <div class="modal-footr d-flex justify-content-between p-3">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
+                                    </button>
+
+
+                                        <button class="btn btn-danger " type="submit" style="background:dark-red;">Confirm</button>
+
+                                </div>
+                            </div>
+                        </div>
+                        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+                                integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+                                crossorigin="anonymous"></script>
+                    </div>
+                </form>
+            </td>
+
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<nav aria-label="Page navigation example">
+            <ul class="pagination">
+            {% if catvalues.has_previous %}
+
+            <li class="page-item text-dark"><a class="page-link text-dark" href="?page={{ catvalues.previous_page_number }}">Previous</a></li>
+
+            {% endif %}
+            <li class="page-item text-dark"><a class="page-link text-dark" href="#">Page {{catvalues.number}} of {{catvalues.paginator.num_pages}}</a></li>
+
+            {% if catvalues.has_next %}
+            <li class="page-item text-dark"><a class="page-link text-dark" href="?page={{catvalues.next_page_number}}">Next</a></li>
+
+          {% endif %}
+
+
+
+
+            </ul>
+          </nav>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- /.content -->
+{% endblock content %}

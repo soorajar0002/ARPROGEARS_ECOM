@@ -1,0 +1,96 @@
+{% extends "admin/admin_base.html" %}
+
+{% block content %}
+<div class="content-header sty-one">
+    <h1 class="text-dark">ORDER MANAGEMENT</h1>
+</div>
+<div class="pull-right search-box">
+    <form action="" method="get" class="search-form">
+        {% csrf_token %}
+        <div class="input-group">
+            <input name="key" class="form-control" placeholder="Search..." type="text">
+            <span class="input-group-btn">
+          <button type="submit" id="search-btn" class="btn btn-flat"><i
+                  class="fa fa-search"></i> </button>
+          </span></div>
+    </form>
+    <!-- search form --> </div>
+
+
+
+    <div class="table-responsive ">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col">Order #</th>
+                <th scope="col">Billing Name</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Order Total</th>
+                <th scope="col">Date</th>
+                <th scope="col">Order Status</th>
+                 <th scope="col"></th>
+
+                <th scope="col">View Details</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for order in orders %}
+            <tr>
+                <th scope="row"><a class="text-dark" style="text-decoration:none;"
+                                   href="{% url 'order_detail' order.order_number %}">{{order.order_number}}</a>
+                </th>
+                <td>{{order.full_name}}</td>
+                <td>{{order.phone}}</td>
+                <td>${{order.order_total}}</td>
+                <td>{{order.created_at}}</td>
+
+                <td>
+                    <form action="{% url 'orderstatus' order.id %}" method="POST">
+                        {% csrf_token %}
+
+
+                        <select class="form-control" name='status'>
+                            <option>{{order.status}}</option>
+                            <option value="New">New</option>
+                            <option value="Accepted">Accepted</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Cancelled">Cancelled</option>
+
+
+                        </select>
+                <td>
+                    <button type="submit" class="btn btn-dark">submit</button>
+                </td>
+                </form>
+
+                </td>
+
+
+                <td><a href="{% url 'orderdetailsadmin' order.id %}" class="btn btn-dark">View Details</a></td>
+            </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+
+
+</div>
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        {% if orders.has_previous %}
+
+        <li class="page-item"><a class="page-link " href="?page={{ orders.previous_page_number }}">Previous</a></li>
+
+        {% endif %}
+        <li class="page-item"><a class="page-link" href="#">Page {{orders.number}} of {{orders.paginator.num_pages}}</a>
+        </li>
+
+        {% if orders.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{orders.next_page_number}}">Next</a></li>
+        {% endif %}
+    </ul>
+</nav>
+</div>
+</div>
+
+{% endblock content %}
