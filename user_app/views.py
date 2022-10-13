@@ -11,7 +11,7 @@ from carts.views import _cart_id
 from carts.models import Cart, CartItem
 import requests
 
-
+@login_required(login_url='user_login')
 def home(request):
     products = Product.objects.all().filter(is_available=True)
     context = {
@@ -175,7 +175,7 @@ def signin_otp(request):
     return render(request, "user/signinotp.html")
 
 
-def otpcheck(request):
+def otp_check(request):
     if request.user.is_authenticated:
         return redirect("home")
     if request.method == "POST":
@@ -290,7 +290,7 @@ def change_password(request):
 
     return render(request, 'user/change_password.html')
 
-
+@login_required(login_url='user_login')
 def canceled_order(request):
     orders = Order.objects.filter(user=request.user, is_ordered=False).order_by('-created_at')
     context = {

@@ -26,7 +26,7 @@
             </aside>
 
             <main class="col-md-9">
-                <div class="" style="margin-left:50rem"><b><a href="{% url 'canceled_order' %}" style="text-decoration:none; color:#000;">Cancelled Orders</a></b></div>
+                <div class="" ><b><a href="{% url 'canceled_order' %}" style="text-decoration:none; color:#000;">Cancelled Orders</a></b></div>
                 <article class="card">
                     <header class="card-header">
                        <div><strong class="d-inline-block mr-3">Your Order History</strong></div>
@@ -37,7 +37,8 @@
                         <div class="row ">
 
                             <div class="col-md-12 col-sm-12">
-                                <table class="table table-responsive">
+                                <div class="table table-responsive">
+                                    <table class="data-table table hover multiple-select-row nowrap" id="myTable">
                                     <thead>
                                     <tr>
                                         <th scope="col">Order #</th>
@@ -81,7 +82,7 @@
 
                         </div> <!-- row.// -->
                     </div> <!-- card-body .// -->
-
+</div>
                 </article> <!-- order-group.// -->
             </main>
         </div> <!-- row.// -->
