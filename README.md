@@ -33,11 +33,11 @@ AR PROGEARS is a ecommerce website build using HTML, CSS, Bootstrap as frontend 
 ## Usage
 
 1. Visit http://localhost:8000 to view the website
-2. If you want to access the merchant dashboard, create a merchant account and log in
+2. If you want to access the admin dashboard, create a admin account and log in
 
 ## Deployment
 
-To deploy this project, you can use a WSGI server such as Gunicorn. Set the `DJANGO_SETTINGS_MODULE` environment variable to `ecommerce.settings.production` and then run `gunicorn ecommerce.wsgi`.
+To deploy this project, you can use AWS EC2 instance. Use WSGI server such as Gunicorn and Nginx to deploy the site.
 
 ## Contributing
 
