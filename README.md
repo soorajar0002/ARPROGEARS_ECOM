@@ -16,5 +16,5 @@ AR PROGEARS is a ecommerce website build using HTML, CSS, Bootstrap as frontend 
 
 ## Prerequisites
 
-*Django==4.1.1
-*Python==3
+* Django==4.1.1
+* Python==3
