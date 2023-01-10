@@ -16,7 +16,5 @@ AR PROGEARS is a ecommerce website build using HTML, CSS, Bootstrap as frontend 
 
 ## Prerequisites
 
-* Node.js >= 8.0.0
-* npm >= 3.0.0
-* MySQL or MariaDB
-* adonis-cli
+*Django==4.1.1
+*Python==3
