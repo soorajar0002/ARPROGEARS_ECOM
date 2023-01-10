@@ -13,3 +13,10 @@ AR PROGEARS is a ecommerce website build using HTML, CSS, Bootstrap as frontend 
 ## Screenshots
 
 ![Home](https://soorajar.cf/static/media/arprogears.3125a856deccdd173427.jpg)
+
+## Prerequisites
+
+* Node.js >= 8.0.0
+* npm >= 3.0.0
+* MySQL or MariaDB
+* adonis-cli
