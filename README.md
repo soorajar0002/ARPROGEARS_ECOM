@@ -9,3 +9,7 @@ AR PROGEARS is a ecommerce website build using HTML, CSS, Bootstrap as frontend 
 * User Management
 * Product Management
 * OTP verification using Twilio
+
+## Screenshots
+
+![Home](https://soorajar.cf/static/media/arprogears.3125a856deccdd173427.jpg)
